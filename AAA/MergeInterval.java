@@ -84,11 +84,7 @@ public class MergeInterval {
 		}
 	}
 
-	/**
-	 * Interval class
-	 * @author megha krishnamurthy
-	 *
-	 */
+	
 	class Interval {
 		int start;
 		int end;
