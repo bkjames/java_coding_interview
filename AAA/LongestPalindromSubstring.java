@@ -11,11 +11,13 @@ public class LongestPalindromSubstring {
 			  boolean palindrome[][] = new boolean[n][n]; //boolean table to store palindrome truth
 			  
 			  //Trivial case: single letter palindromes
+			  // 한개짜리는 무조건 true
 			  for (int i = 0; i < n; i++) {
 				  palindrome[i][i] = true;
 			  }
 			  
 			  //Finding palindromes of two characters.
+			  // 두개짜리는 bb 이런것만 true
 			  for (int i = 0; i < n-1; i++) {
 //				  System.out.println("i "+i+" i+1 "+(i+1));
 //				  System.out.println("s.charAt(i) "+s.charAt(i)+" s.charAt(i+1) "+s.charAt(i+1));
