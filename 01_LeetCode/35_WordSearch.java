@@ -23,82 +23,64 @@ package coding;
  */
 public class WordSearch {
 
-    public boolean exist(char[][] board, String word) {
-        if (word == null || word.length() == 0) {
+     public boolean exist3(char[][] board, String word) {
+        if (board == null || board.length == 0) {
             return false;
         }
-
-        boolean[][] visited = new boolean[board.length][board[0].length];
-
-        char[] words = word.toCharArray();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (backtrack(board, words, i, j, 0, visited)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean backtrack(char[][] board, char[] words, int x, int y, int step, boolean[][] visited) {
-        if (step == words.length) {
+        if (word == null || word.length() == 0) {
             return true;
         }
-        if (x < 0 || x == board.length || y < 0 || y == board[0].length) {
-            return false;
-        }
-        if (visited[x][y]) {
-            return false;
-        }
-        if (words[step] != board[x][y]) {
-            return false;
-        }
-        visited[x][y] = true;
-        boolean isAnyOk = backtrack(board, words, x, y + 1, step + 1, visited) ||
-                backtrack(board, words, x, y - 1, step + 1, visited) ||
-                backtrack(board, words, x + 1, y, step + 1, visited) ||
-                backtrack(board, words, x - 1, y, step + 1, visited);
-        visited[x][y] = false;
-        return isAnyOk;
-    }
 
-    public boolean exist2(char[][] board, String word) {
-        if (word == null || word.length() == 0) return true;
-        int row = board.length;
-        int col = board[0].length;
-        boolean[][] visited = new boolean[row][col];
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (dfs2(board, visited, word, row, col, i, j, 0)) {
+        // visited = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            for (int  j = 0; j < board[0].length; j++) {
+                // If the dfs's result it true, it means that we can find the word in board.
+                if (dfs(board, i, j, word, 0)) {
                     return true;
                 }
             }
         }
+
         return false;
     }
 
-    int[][] d = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-
-    boolean dfs2(char[][] board, boolean[][] visited, String word, int row, int col, int i, int j, int index) {
+    private boolean dfs(char[][] board, int i, int j, String word, int index) {
         if (index == word.length()) {
             return true;
         }
-        if (i < 0 || i >= row || j < 0 || j >= col || visited[i][j]) {
+        // if (i < 0 || i >= board.length || j < 0 || j >= board[i].length || board[i][j] != word.charAt(index) || visited[i][j]) {
+        //     return false;
+        // }
+        if (i < 0 || i >= board.length || j < 0 || j >= board[i].length || board[i][j] != word.charAt(index)) {
             return false;
         }
-        if (word.charAt(index) != board[i][j]) {
-            return false;
+
+        // visited[i][j] = true;
+        char temp = board[i][j];
+        board[i][j] = '#';
+        // 采用方向数组进行 dfs，个人还是非常青睐这个写法的。该写法优点是简洁便利；
+        // 缺点是：运行效率比直接写出各个方向的遍历函数要低一些(需要分配数据空间和进行数组访问）
+        // 大家可根据情况自行取舍，请灵活变通哦(●'◡'●)
+        // int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1 }};
+        // for (int[] dir : dirs) {
+        //     if (dfs(board, i + dir[0], j + dir[1], word, index + 1)) {
+        //         return true;
+        //     }
+        // }
+        // go to the four directions, check whether we can find the next character of the word or not.
+        if (dfs(board, i-1, j, word, index+1)
+                || dfs(board, i+1, j, word, index+1)
+                || dfs(board, i, j-1, word, index+1)
+                || dfs(board, i, j+1, word, index+1)) {
+            return true;
         }
-        visited[i][j] = true;
-        for (int k = 0; k < 4; k++) {
-            if (dfs2(board, visited, word, row, col, i + d[k][0], j + d[k][1], index + 1)) {
-                return true;
-            }
-        }
-        visited[i][j] = false;
+        // Backtracking
+        // visited[i][j] = false;
+        board[i][j] = temp;
+
         return false;
     }
+
 
     public static void main(String[] args)
 	{
@@ -113,9 +95,8 @@ public class WordSearch {
 
         String wordTest = "ABCCED";
         WordSearch word1 = new WordSearch();
-        boolean result =  word1.exist(board, wordTest);
+        boolean result =  word1.exist3(board, wordTest);
         System.out.println("result : "+result);
         
-    }
 
 }
