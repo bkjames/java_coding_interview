@@ -58,9 +58,7 @@ public class WordSearch {
         // visited[i][j] = true;
         char temp = board[i][j];
         board[i][j] = '#';
-        // 采用方向数组进行 dfs，个人还是非常青睐这个写法的。该写法优点是简洁便利；
-        // 缺点是：运行效率比直接写出各个方向的遍历函数要低一些(需要分配数据空间和进行数组访问）
-        // 大家可根据情况自行取舍，请灵活变通哦(●'◡'●)
+        
         // int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1 }};
         // for (int[] dir : dirs) {
         //     if (dfs(board, i + dir[0], j + dir[1], word, index + 1)) {
