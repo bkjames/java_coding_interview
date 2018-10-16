@@ -53,6 +53,48 @@ public class MergeKSortedList {
 	    return head.next;
 	 
 	}
+	
+	public ListNode mergeKLists(List<ListNode> lists) {
+        if (lists.size() == 0) {
+            return null;
+        }
+
+        return mergeHelper(lists, 0, lists.size() - 1);
+    }
+
+    private ListNode mergeHelper(List<ListNode> lists, int start, int end) {
+        if (start == end) {
+            return lists.get(start);
+        }
+
+        int mid = start + (end - start) / 2;
+        ListNode left = mergeHelper(lists, start, mid);
+        ListNode right = mergeHelper(lists, mid + 1, end);
+        return mergeTwoLists(left, right);
+    }
+
+    private ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                curr.next = list1;
+                curr = list1;
+                list1 = list1.next;
+            } else {
+                curr.next = list2;
+                curr = list2;
+                list2 = list2.next;
+            }
+        }
+        if (list1 != null) {
+            curr.next = list1;
+        } else {
+            curr.next = list2;
+        }
+
+        return dummy.next;
+    }
 	   //Drive code
  public static void main(String args[])
  {
