@@ -27,13 +27,13 @@ public class PalindromeLinkedList {
 
 	        Stack<ListNode> stack = new Stack<>();
 	        ListNode mid = getMid(head);
-	        // 将链表后半部分的元素入栈以实现逆序
+	     
 	        while (mid != null) {
 	            stack.push(mid);
 	            mid = mid.next;
 	        }
 
-	        // 将链表中的元素取出来，依次与链表的前半部分进行比较
+	
 	        while (!stack.isEmpty()) {
 	            if (head.val != stack.pop().val) {
 	                return false;
