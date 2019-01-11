@@ -1,31 +1,33 @@
 
 
-public class JewelAndStone {
+public class JewelsAndStones {
 
+	
+	
 	public static void main(String[] args) {
-		
-		String J ="aA";
-		String S ="aAAbbbb";
-		System.out.println(numJewelsInStones(J,S));
+		String J = "aA",  S = "aAAbbbb";
+		System.out.println(numJewelsInStones(J, S));
+			
+
 	}
-	public static int numJewelsInStones(String J, String S) {
-        // Corner cases.
-        if (J == null || S == null || J.length() == 0 || S.length() == 0)
-            return 0;
-        
-        // Map char to its frequency in S.
-        int[] charToFreq = new int[256]; 
-        for (char ch : S.toCharArray()) {
-            charToFreq[ch]++;
-        }
-        
-        int numJewels = 0; // Number of jewels among stones.
-        for (char ch : J.toCharArray()) {
-            if (charToFreq[ch] > 0) {
-                numJewels += charToFreq[ch];
-            }
-        }
-        
-        return numJewels;
-    }
+	 public static int numJewelsInStones(String J, String S) {
+	        int cntJewels = 0;
+	        if (J == null || J.length() == 0 || S == null || S.length() == 0) {
+	            return cntJewels;
+	        }
+	        int[] hash = new int[256];
+	        for (char ch : S.toCharArray()) {
+	        	System.out.println("ch: "+(int)ch);
+	        	
+	            hash[ch]++;
+	        }
+	        for (char ch : J.toCharArray()) {
+	            if (hash[ch] != 0) {
+	            	System.out.println("hash[ch]: "+hash[ch]);
+	                cntJewels += hash[ch];
+	                hash[ch] = 0;
+	            }
+	        }
+	        return cntJewels;
+	    }
 }
