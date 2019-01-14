@@ -13,6 +13,16 @@ public class NumberOfIsland {
 		print(M);
 	}
 	
+	public static void print2(char[][] T) {
+		int m = T.length;
+		int n = T[0].length;
+		for (int i = 0; i < m; i++){
+			for (int j = 0; j < n; j++)
+				System.out.print(T[i][j] + " ");
+			System.out.println();
+		}
+	}
+	
 	public static void print(char[][] grid) {
 		int m = grid.length;
 		int n = grid[0].length;
