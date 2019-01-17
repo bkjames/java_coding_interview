@@ -55,6 +55,32 @@ public class WordBreak {
 }
 
 
+public static boolean wordBreak2(String s, Set<String> dict) {
+		  if (s == null || s.length() == 0) return false;
+		  
+		  int n = s.length();
+		  
+		  // dp[i] represents whether s[0...i] can be formed by dict
+		  boolean[] dp = new boolean[n];
+		  
+		  for (int i = 0; i < n; i++) {
+		    for (int j = 0; j <= i; j++) {
+		      System.out.println("i : "+i+" j: "+j);
+		      String sub = s.substring(j, i + 1);
+		      System.out.println("sub : "+sub);
+		      
+		      if (dict.contains(sub) && (j == 0 || dp[j - 1])) {
+		        dp[i] = true;
+		        System.out.println("i : "+i+" sub: "+sub+" j:"+j);
+		        break;
+		      }
+		    }
+		  }
+		  
+		  return dp[n - 1];
+		}
+
+
 
 public class Solution {
     /*
