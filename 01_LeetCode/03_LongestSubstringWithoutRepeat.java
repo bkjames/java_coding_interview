@@ -9,6 +9,20 @@ public class LongestSubstringWithoutRepeat {
 		System.out.println(longestSub(str));
 	}
 	
+	//java sliding window
+      public static int lengthOfLongestSubstring2(String s) {
+	        Queue<Character> queue = new LinkedList<>();
+	        int res = 0;
+	        for (char c : s.toCharArray()) {
+	            while (queue.contains(c)) {
+	                queue.poll();
+	            }
+	            queue.offer(c);
+	            res = Math.max(res, queue.size());
+	        }
+	        return res;
+	    }
+	
 	
 	public static int lengthOfLongestSubstring(String s) {
 	        
