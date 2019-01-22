@@ -1,5 +1,7 @@
 package zz01;
 
+package ama02;
+
 public class LongestPalindrominSubstring {
 	
 	public static void main(String args[])
@@ -16,16 +18,12 @@ public class LongestPalindrominSubstring {
 
 		String longest = s.substring(0, 1);
 		for (int i = 0; i < s.length(); i++) {
-
-	// get longest palindrome with center of i
-		String tmp = helper(s, i, i);
-		if (tmp.length() > longest.length()) {
-			longest = tmp;
-		}
-
-	// get longest palindrome with center of i, i+1
-		tmp = helper(s, i, i + 1);
-	    	if (tmp.length() > longest.length()) {
+			String tmp = helper(s, i, i); // get longest palindrome with center of i
+			if (tmp.length() > longest.length()) {
+				longest = tmp;
+			}
+			tmp = helper(s, i, i + 1);// get longest palindrome with center of i, i+1
+			if (tmp.length() > longest.length()) {
 	    		longest = tmp;
 	    	}
 		}
@@ -33,13 +31,16 @@ public class LongestPalindrominSubstring {
 	}
 
 	public static String helper(String s, int begin, int end) {
-
+		
+		System.out.println("11s: "+s+" "+begin+" "+end);
 		while (begin >= 0 && end <= s.length() - 1 && s.charAt(begin) == s.charAt(end)) {
 
 			begin--;
 			end++;
 		}
-
+		System.out.println("22s: "+s+" "+(begin+1)+" "+end);
+		System.out.println("33substring: "+(s.substring(begin + 1, end)));
+		System.out.println();
 		return s.substring(begin + 1, end);
 	}
 }
