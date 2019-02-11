@@ -9,9 +9,9 @@ public class Array2D {
 	public static void main(String[] args) {
 		List<List<Integer>> list = new ArrayList<>();
 		
-		for(int i=0; i<5; i++) {
+		for(int i=0; i<3; i++) {
 			List<Integer> integers = new ArrayList<Integer>();
-			for(int j=0; j<5; j++) {
+			for(int j=0; j<4; j++) {
 				integers.add(i);
 			}
 			list.add(integers);
@@ -25,8 +25,10 @@ public class Array2D {
 		
 		for(int i=0; i<list.size(); i++) {
 			for(int j=0; j<list.get(i).size(); j++) {
+				System.out.print(" "+i+""+j+", ");
 				array[i][j] = list.get(i).get(j);
 			}
+			System.out.println();
 		}
 		System.out.println(Arrays.deepToString(array));
 		
