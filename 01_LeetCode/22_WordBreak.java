@@ -8,7 +8,33 @@ import java.util.Arrays;
 public class WordBreak {
 		//Given a string s and a dictionary of words, determine if s can be segmented
 		//into a space-separated sequence of one or more dictionary words.
-
+ public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> dict = new HashSet<>(wordDict);
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(0);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int j = 0; j < size; j++) {
+                int n = queue.remove();
+                if (n == s.length()) {
+                    return true;
+                }
+                if (!visited.contains(n)) {
+                    for (int i = n + 1; i <= s.length(); i++) {
+                        if (dict.contains(s.substring(n, i))) {
+                            queue.add(i);
+                            visited.add(n);
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+	
+	
+	
 		public static int wordBreak(String a, ArrayList<String> b) {
 			int n = a.length();
 			int T[][] = new int[n][n];
