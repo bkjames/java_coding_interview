@@ -32,7 +32,7 @@ class TimePoint implements Comparable<TimePoint> {
 public class A023_MeetingRoom2 {
 
 	public static void main(String[] args) {
-		int[][] nums= {{0,4}, {5,10}, {15,20}};
+		int[][] nums= {{0,30}, {5,10}, {15,20}};
 		Interval in = new Interval(0,4);
 		Interval in2 = new Interval(5,10);
 		Interval in3 = new Interval(15,20);
