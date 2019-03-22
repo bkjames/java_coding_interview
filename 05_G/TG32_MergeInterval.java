@@ -42,18 +42,20 @@ public class MergeInterval {
 		 
 		 Collections.sort(intervals, comp);
 		 
-		 Interval curr = intervals.get(0);
+		 Interval hold = intervals.get(0);
 		 for(int i=1; i< intervals.size(); i++) {
-			 Interval inter = intervals.get(i);
-			 if(curr.end >= inter.start) {
-				 curr.end = Math.max(curr.end, inter.end);
-
+			 Interval curr = intervals.get(i);
+			
+			 if(hold.end >= curr.start) {
+				
+				 hold.end = Math.max(hold.end, curr.end);
+		
 			 }else {
-				 resList.add(curr);
-				 curr = inter;
+				 resList.add(hold);
+				 hold = curr;
 			 } 
 		 }
-		 resList.add(curr);
+		 resList.add(hold);
 		 System.out.println("===sort ===");
 		 print(resList);
 		 return resList;
