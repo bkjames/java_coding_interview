@@ -69,6 +69,94 @@ import java.util.Queue;
 	        return true;
 	    }    
 	}
+
+package real;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class A023_WordLadder {
+
+	public static void main(String[] args) {
+
+		List<String> wordList = new ArrayList<>();
+		wordList.add("hot");
+		wordList.add("dot");
+		wordList.add("lot");
+		wordList.add("log");
+		wordList.add("cog");
+		
+		String[] words = {"hot","dot","lot","log","cog"};
+		
+		
+		System.out.println(ladderLength("hit", "cog", words));
+	}
+	public static int ladderLength(String beginWord, String endWord, String[] words) {
+		
+		Set<String> wordSet = new HashSet<String>();
+		for(String s: words) {
+			wordSet.add(s);
+		}
+		
+        if (!wordSet.contains(endWord)) {
+            return 0;
+        }
+        wordSet.add(beginWord);
+		
+        
+		Set<String> beginSet = new HashSet<String>(), endSet = new HashSet<String>();
+
+		int len = 0;
+		int strLen = beginWord.length();
+		HashSet<String> visited = new HashSet<String>();
+		
+		beginSet.add(beginWord);
+		endSet.add(endWord);
+		while (!beginSet.isEmpty() && !endSet.isEmpty()) {
+			if (beginSet.size() > endSet.size()) {
+				Set<String> set = beginSet;
+				beginSet = endSet;
+				endSet = set;
+			}
+
+			Set<String> temp = new HashSet<String>();
+			for (String word : beginSet) {
+				System.out.println("*********beginSet: "+beginSet);
+				char[] charArr = word.toCharArray();
+
+				for (int i = 0; i < charArr.length; i++) {
+					for (char c = 'a'; c <= 'z'; c++) {
+						char old = charArr[i];
+//						System.out.println("old: "+old+" c: "+c);
+						charArr[i] = c;
+						String target = String.valueOf(charArr);
+						System.out.println("target: "+target);
+
+						if (endSet.contains(target)) {
+							return len + 1;
+						}
+
+						if (!visited.contains(target) && wordSet.contains(target)) {
+							System.out.println("====================target: "+target);
+							temp.add(target);
+							visited.add(target);
+						}
+						charArr[i] = old;
+					}
+				}
+				System.out.println("==================");
+			}
+			System.out.println("========temp============temp: "+temp);
+			beginSet = temp;
+			len++;
+		}
+		
+		return 0;
+	}
+}
+
 	 
 //	
 //	class Solution {
