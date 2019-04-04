@@ -1,3 +1,75 @@
+package test0404;
+
+public class TargetNumber {
+
+	  private static int answer = 0;
+	    public static void main(String[] args) {
+	        int[] numbers = {1, 1, 1, 1, 1};
+	        int target = 3;
+	        TargetNumber solution = new TargetNumber();
+	        System.out.println(solution.solution(numbers, target));
+	    }
+	    
+	    
+	    private int count, size, t;
+	    public int solution(int[] numbers, int target) {
+	        size = numbers.length;
+	        t = target;
+	        dfs(0, numbers, 0);
+
+	        return count;
+	    }
+
+	    private void dfs(int currentIndex, int[] numbers, int currentSum) {
+	    	System.out.println("currentIndex: "+currentIndex+" currentSum: "+currentSum);
+	        if(currentIndex == size) {
+	            if(currentSum == t) {
+	                count++;
+	            }
+	            return;
+	        }
+
+	        dfs(currentIndex+1, numbers, currentSum+numbers[currentIndex]);
+	        dfs(currentIndex+1, numbers, currentSum-numbers[currentIndex]);
+	        System.out.println("=====end===currentIndex: "+currentIndex+" currentSum: "+currentSum);
+	    }
+
+//	    public int solution(int[] numbers, int target) {
+//	        int[] flag = new int[numbers.length];
+//	        findTargetNumber(numbers, target, flag, 0);
+//	        return answer;
+//	    }
+//
+//	    public static void findTargetNumber(int[] numbers, int target, int[] flag, int depth) {
+//	        if (depth == numbers.length) {
+//	            int sum=0;
+//	            int max = numbers.length;
+//	            for (int i = 0; i < max; i++) {
+//	                if (flag[i] == 1) {
+//	                    sum += numbers[i];
+//	                } else {
+//	                    sum -= numbers[i];
+//	                }
+//	            }
+//	            if (sum == target) {
+//	                answer++;
+//	            }
+//	            return;
+//	        }
+//
+//	        //더하는경우
+//	        flag[depth] = 1;
+//	        findTargetNumber(numbers, target, flag, depth + 1);
+//
+//	        //빼는경우
+//	        flag[depth] = 0;
+//	        findTargetNumber(numbers, target, flag, depth + 1);
+//	    }
+}
+
+
+
+
 package test0325;
 
 import java.util.*;
