@@ -1,4 +1,4 @@
-package zGoo;
+package zGoo1;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import java.util.Set;
   }
  
 
-public class G011_GuessTheWord implements Master{
+public class G009_GuessTheWord implements Master{
 
 	String  word = "acckzz";
 	public int guess(String word) {
@@ -25,11 +25,11 @@ public class G011_GuessTheWord implements Master{
 		String[] wordlist = {"acckzz","ccbazz","eiowzz","abcczz"};
 		
 				
-		G011_GuessTheWord a = new G011_GuessTheWord();
-		a.findSecretWord(wordlist, master);
+		G009_GuessTheWord a = new G009_GuessTheWord();
+		a.findSecretWord(wordlist, a);
 				
 	}
-	public void findSecretWord(String[] wordlist, Master master) {
+ public void findSecretWord(String[] wordlist, Master master) {
 		int[] count = new int[26];
 		for (String s : wordlist) {
 			for (char c : s.toCharArray()) {
