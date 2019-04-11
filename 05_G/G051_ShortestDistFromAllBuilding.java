@@ -4,8 +4,8 @@ public class G051_ShortestDistFromAllBuilding {
 
 	public static void main(String[] args) {
 		int[][] grid= {{1,0,2,0,1},
-					   {0,0,0,0,0},
-				       {0,0,1,0,0}};
+			       {0,0,0,0,0},
+			       {0,0,1,0,0}};
 		G051_ShortestDistFromAllBuilding a = new G051_ShortestDistFromAllBuilding();
 		a.shortestDistance(grid);
 
