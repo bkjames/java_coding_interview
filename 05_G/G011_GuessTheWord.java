@@ -1,7 +1,11 @@
+package test;
+
+
+
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class Solution {
+public class G009_GuessWord {
   static class Master {
     int callCount;
     String secretWord;
@@ -12,9 +16,19 @@ public class Solution {
 
     int guess(String word) {
       System.out.println("Master.guess() is called " + ++callCount + " times.");
-      return getMatches(secretWord, word);
+      return  getMatches(secretWord, word);
     }
   }
+  
+  public static void main(String[] args) {
+	  G009_GuessWord solution = new G009_GuessWord();
+	    Master master = new Master("acckzz");
+//	    Master master = new Master("aaaaaa");
+	    String[] wordList = {
+	    		"acckzz","ccbazz","eiowzz","abcczz"
+	    };
+	    solution.findSecretWord(wordList, master);
+	  }
 
   private static final int ALL_MATCHED = 6;
 
@@ -33,6 +47,7 @@ public class Solution {
     while (!possibleSecretIndices.isEmpty()) {
       int guessIndex = possibleSecretIndices.poll();
       int matches = master.guess(wordlist[guessIndex]);
+      System.out.println("matches: "+matches);
       if (matches == ALL_MATCHED) {
         break;
       }
@@ -56,23 +71,5 @@ public class Solution {
     return total;
   }
 
-  public static void main(String[] args) {
-    Solution solution = new Solution();
-    Master master = new Master("hbaczn");
-    String[] wordList = {
-      "gaxckt", "trlccr", "jxwhkz", "ycbfps", "peayuf", "yiejjw", "ldzccp", "nqsjoa", "qrjasy",
-      "pcldos", "acrtag", "buyeia", "ubmtpj", "drtclz", "zqderp", "snywek", "caoztp", "ibpghw",
-      "evtkhl", "bhpfla", "ymqhxk", "qkvipb", "tvmued", "rvbass", "axeasm", "qolsjg", "roswcb",
-      "vdjgxx", "bugbyv", "zipjpc", "tamszl", "osdifo", "dvxlxm", "iwmyfb", "wmnwhe", "hslnop",
-      "nkrfwn", "puvgve", "rqsqpq", "jwoswl", "tittgf", "evqsqe", "aishiv", "pmwovj", "sorbte",
-      "hbaczn", "coifed", "hrctvp", "vkytbw", "dizcxz", "arabol", "uywurk", "ppywdo", "resfls",
-      "tmoliy", "etriev", "oanvlx", "wcsnzy", "loufkw", "onnwcy", "novblw", "mtxgwe", "rgrdbt",
-      "ckolob", "kxnflb", "phonmg", "egcdab", "cykndr", "lkzobv", "ifwmwp", "jqmbib", "mypnvf",
-      "lnrgnj", "clijwa", "kiioqr", "syzebr", "rqsmhg", "sczjmz", "hsdjfp", "mjcgvm", "ajotcx",
-      "olgnfv", "mjyjxj", "wzgbmg", "lpcnbj", "yjjlwn", "blrogv", "bdplzs", "oxblph", "twejel",
-      "rupapy", "euwrrz", "apiqzu", "ydcroj", "ldvzgq", "zailgu", "xgqpsr", "wxdyho", "alrplq",
-      "brklfk"
-    };
-    solution.findSecretWord(wordList, master);
-  }
+
 }
