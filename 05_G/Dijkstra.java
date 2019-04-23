@@ -10,6 +10,51 @@ public class Dijkstra {
 		Dijkstra a = new Dijkstra();
 		System.out.println(a.findCheapestPriceFinal(n, flights, src, dst, k));
 	}
+	
+	//2
+		
+		    class Node {
+        int weight;
+        int src;
+        int K;
+        List<Integer> path;
+        Node(int weight, int src, int K, List<Integer> path) {
+            this.weight = weight;
+            this.src = src;
+            this.K = K;
+            this.path = new ArrayList<Integer>();
+            this.path.addAll(path);
+        }
+    }
+    
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+        if(flights.length == 0) return -1;
+        Map<Integer, Map<Integer, Integer>> hash = new HashMap<>();
+        for(int i = 0; i < flights.length; i++) {
+            Map<Integer, Integer> tem = hash.getOrDefault(flights[i][0], new HashMap<>());
+            tem.put(flights[i][1], flights[i][2]);
+            hash.put(flights[i][0], tem);
+        }
+        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> a.weight - b.weight);
+        pq.add(new Node(0, src, K+1, Arrays.asList(src)));
+        while(!pq.isEmpty()) {
+            Node top = pq.poll();
+            if(top.K < 0) continue;
+            if(top.src == dst) {
+                for(Integer val: top.path) {        
+                    System.out.print(val + " ");
+                } 
+                return top.weight;
+            }
+            Map<Integer, Integer> map = hash.getOrDefault(top.src, new HashMap<>());
+            for(Map.Entry<Integer, Integer> entry: map.entrySet()) {
+                Node node = new Node(top.weight + entry.getValue(), entry.getKey(), top.K-1, top.path);
+                node.path.add(entry.getKey());
+                pq.offer(node);
+            }
+        }
+        return -1;
+    }
 	//1
 	  public static class Edge {
 	        int node;
