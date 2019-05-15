@@ -1,9 +1,6 @@
-package Top50;
-
-
+package part1;
 
 import java.util.*;
-import java.util.Comparator;
 
 class Interval{
 	int start, end;
@@ -16,150 +13,87 @@ class Interval{
 		this.end = e;
 	}
 }
-public class T12_MeetingRoom2 {
-
+public class MeetingRoom {
 	public static void main(String[] args) {
 		Interval in1 = new Interval(0, 30);
-		Interval in2 = new Interval(5,10);
+		Interval in2 = new Interval(5, 10);
 		Interval in3 = new Interval(15, 20);
 		
 		Interval[] intervals = {in1, in2, in3};
-		T12_MeetingRoom2 a = new T12_MeetingRoom2();
-		System.out.println(a.minMeetingRoom(intervals));
+		MeetingRoom a = new MeetingRoom();
+		System.out.println(a.minMeetingRooms_pq(intervals));
 		System.out.println(a.minMeetingRooms(intervals));
-		
 	}
 	
-	int minMeetingRoom(Interval[] intervals) {
-		Arrays.sort(intervals, comp);
-		
-		return helper(new ArrayList(Arrays.asList(intervals)));
-		
-	}
 	
-	int helper(List<Interval> list) {
-		if(list.size()==0) 
-			return 0;
-		Interval pre = list.get(0);
-		List<Interval> nextList = new ArrayList();
-		for(int i=1; i<list.size(); i++) {
-			Interval inter = list.get(i);
-			if(inter.start < pre.end) {
-				nextList.add(inter);
-			}else {
-				pre = inter;
-			}
-		}
-		System.out.println("nextList: "+nextList);
-		return 1+helper(nextList);
+	 public int minMeetingRooms_pq(Interval[] intervals) {
+			if (intervals.length <= 1)
+				return intervals.length;
 		
-	}
-	
-	Comparator<Interval> comp = new Comparator<Interval>() {
+			Arrays.sort(intervals, new Comparator<Interval>() {
+				public int compare(Interval i1, Interval i2) {
+					return i1.start - i2.start;
+				}
+			});
 
-		@Override
-		public int compare(Interval a, Interval b) {
+	
+			PriorityQueue<Interval> pq = new PriorityQueue<>(new Comparator<Interval>() {
+				public int compare(Interval i1, Interval i2) {
+					return i1.end - i2.end;
+				}
+			});
+
 			
-			return a.start-b.start;
-		}
+			pq.add(intervals[0]);
+			for (int i = 1; i < intervals.length; i++) {
+				if (pq.peek().end <= intervals[i].start) { 
+					pq.poll();
+				}
+				pq.add(intervals[i]); 
+				
+			}
+
 		
-	};
-	
-	class Element{
-        int val;
-        boolean start;
-        Element(int val, boolean start){
-            this.val = val;
-            this.start = start;
-        }
-    }
-    public int minMeetingRooms(Interval[] intervals) {
-        if(intervals == null || intervals.length == 0){
-            return 0;
-        }
-        int max = 1;
-        List<Element> lists = new ArrayList<Element>();
-        for(int i = 0; i < intervals.length; i++){
-            lists.add(new Element(intervals[i].start, true));
-            lists.add(new Element(intervals[i].end, false));
-        }
-        int curr = 0;
-        Collections.sort(lists, new Comparator<Element>(){
-            @Override
-            public int compare(Element e1, Element e2){
-                if(e1.val < e2.val){
-                    return -1;
-                }else if(e1.val > e2.val){
-                    return 1;
-                }else{
-                    return e1.start == false ? -1 : 1;  
-                }
-            }
-        });
-        for(Element ele : lists){
-            if(ele.start){
-                curr++;
-                max = Math.max(max, curr);
-            }else{
-                curr--;
-            }
-        }
-        return max;
-    }
-    
-    
-	
-	
-	 private class Time {
-	        int t;
-	        Character type;
-	        Time(int t, Character type) {
-	            this.t = t;
-	            this.type = type;
-	        }
-	    }
-
-	    public int minMeetingRooms_time(Interval[] intervals) {
-
-	        ArrayList<Time> list = new ArrayList<>();
-
-	        for (int i = 0; i < intervals.length; i++) {
-	            list.add(new Time(intervals[i].start, 's'));
-	            list.add(new Time(intervals[i].end, 'e'));
-	        }
-
-	        Collections.sort(list, new Comparator<Time>() {
-	            @Override
-	            public int compare(Time o1, Time o2) {
-	                if (o1.t != o2.t) {
-	                    return o1.t - o2.t;
-	                }
-					// If time is the same, start time should be infront of end time in the sorting
-	                if (o1.type == 's') {
+			return pq.size(); 
+		}
+	    
+	  public int minMeetingRooms(Interval[] intervals) {
+	        if (intervals.length == 0)
+	            return 0;
+	        if (intervals.length == 1)
+	            return 1;
+	        Arrays.sort(intervals,new Comparator<Interval>(){
+	            public int compare(Interval a, Interval b){
+	                if (a.start == b.start)
+	                    return 0;
+	                if (a.start > b.start)
 	                    return 1;
-	                } else {
+	                else
 	                    return -1;
-	                }
 	            }
 	        });
-	        int num = 0;
-	        int res = 0;
-
-	        for (int i = 0; i < list.size(); i++) {
-	            if (list.get(i).type == 's') {
-	                num++;
-	            } else {
-	                num--;
+	        
+	        int max = intervals[0].end;
+	        Interval last = intervals[0];
+	        int sum = 1;
+	        for (int i=1;i<intervals.length;i++){
+	            if (intervals[i].start >= max){
+	                max = intervals[i].end;
+	                last.start = intervals[i].start;
+	                last.end = intervals[i].end;
 	            }
-	            res = Math.max(res, num);
+	            else{
+	                max = Math.max(intervals[i].end,max);
+	                if (intervals[i].start < last.end)
+	                    sum ++;
+	                last.start = intervals[i].start;
+	                last.end = intervals[i].end;
+	            }
 	        }
-
-	        return res;
+	        return sum;
 	    }
-	    
-	    
-//	    PQ
-	    public int minMeetingRooms_PQ(Interval[] intervals) {
+	
+	 public int minMeetingRooms_PQ(Interval[] intervals) {
 	        if(intervals == null || intervals.length == 0) {
 	            return 0;
 	        }
@@ -186,7 +120,40 @@ public class T12_MeetingRoom2 {
 	        
 	        return roomRequired;
 	    }
-	    
+	 
 	
+	
+	
+	public int solve(Interval[] intervals) {
+		
+		Arrays.sort(intervals, comp);
+		return helper(new ArrayList(Arrays.asList(intervals)));
+	}
+	public int helper(List<Interval> list) {
+		if(list.size() ==0) return 0;
+		System.out.println("list: "+list.size());
+		Interval prev = list.get(0);
+		List<Interval> nextList = new ArrayList<>();
+		for(int i=1; i<list.size(); i++) {
+			Interval curr = list.get(i);
+			if(curr.start < prev.end) {
+				nextList.add(curr);
+			}else {
+				prev = curr;
+			}
+		}
+		int val = 1+helper(nextList);
+		return val;
+		
+	}
+	
+	Comparator<Interval> comp = new Comparator<Interval>() {
+		@Override
+		public int compare(Interval a, Interval b) {
+			return a.start -b.start;
+		}
+		
+	};
 	
 }
+	
