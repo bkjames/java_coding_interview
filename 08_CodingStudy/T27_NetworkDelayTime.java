@@ -4,15 +4,16 @@ import java.util.*;
 public class T27_NetworkDelayTime {
 
 	public static void main(String[] args) {
-		int[][] times = {{2,1,1},{2,3,1},{3,4,1}};
+		int[][] times = {{2,1,1},{2,3,1},{3,4,6}};
 		int N =4;
 		int K =2;
 		T27_NetworkDelayTime a = new T27_NetworkDelayTime();
+		System.out.println(a.networkDelayTime_djik(times, N, K));
 		System.out.println(a.networkDelayTime(times, N, K));
 		
 	}
 	
-	   // standard Dijkstra question  time O(2V + E), spcace O(V + E)
+	  // standard Dijkstra question  time O(2V + E), spcace O(V + E)
     public int networkDelayTime(int[][] times, int N, int K) {
         Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
         // construct graph
@@ -58,4 +59,48 @@ public class T27_NetworkDelayTime {
             this.dist = dist;
         }
     }
+	
+	 static class Pair_d {
+	        int dest, time;
+	        Pair_d(int dest, int time) {
+	            this.dest = dest;
+	            this.time = time;
+	        }
+	    }
+
+	    public int networkDelayTime_djik(int[][] times, int N, int K) {
+	        Map<Integer, Set<Pair_d>> map = new HashMap<>();
+	        for (int[] time: times) {
+	            if (!map.containsKey(time[0]))
+	                map.put(time[0], new HashSet<>());
+	            map.get(time[0]).add(new Pair_d(time[1], time[2]));
+	        }
+	        int[] dp = new int[N + 1];
+	        Arrays.fill(dp, Integer.MAX_VALUE);
+	        dp[0] = dp[K] = 0;
+	        Queue<Integer> q = new LinkedList<>();
+	        q.offer(K);
+	        while (!q.isEmpty()) {
+	            int n = q.poll();
+	            if (!map.containsKey(n))
+	                continue;
+	            for (Pair_d p: map.get(n)) {
+	                int time = dp[n] + p.time;
+	                if (dp[p.dest] > time) {
+	                    q.offer(p.dest);
+	                    dp[p.dest] = time;
+	                }
+	            }
+	        }
+	        int delay = 0;
+	        for (int n: dp)
+	            delay = Math.max(delay, n);
+	        return delay == Integer.MAX_VALUE ? -1 : delay;
+	    }
+	
+	 
+    
+	
+	
+   
 }
