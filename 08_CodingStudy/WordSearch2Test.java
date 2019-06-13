@@ -1,100 +1,117 @@
-package zTest;
-
-import java.util.*;
+package zTest02;
 
 
-
-class TrieNode {
-    TrieNode[] next = new TrieNode[26];
-    String word;
-}
-
-public class WordSearch2 {
+public class G049_LongestIncreasingInaMat {
 	
 	public static void main(String[] args) {
-		
-		
-		char[][] board = {
-				{'A','B','T','T','T'},
-				{'T','C','D','E','T'},
-				{'T','T','T','F','T'},
-				{'B','A','H','G','F'},
-				{'C','D','E','F','G'}
-				};
-		String[] words = {"oath","pea","eat","rain"};
-		WordSearch2 a = new WordSearch2();
-		System.out.println(a.findWords(board, words));
-	}
-	TrieNode root = new TrieNode();
-	TrieNode p = root;
-	public List<String> findWords(char[][] board, String[] words) {
-	    List<String> res = new ArrayList<>();
-	    
-//	    TrieNode root = buildTrie(words);
-	    boolean[][] visited = new boolean[board.length][board[0].length];
-	    for (int i = 0; i < board.length; i++) {
-	        for (int j = 0; j < board[0].length; j++) {
-	            dfs (board, i, j,  res, visited);
-	        }
-	    }
-	    
-//	    findTrie(p);
-	    return res;
-	}
-	 void findTrie(TrieNode p) {
-		 while(p!= null) {
-			System.out.println("aaa "+p.next.toString());
-//			p = p.next;
-		 }
-	 }
+		int[][] matrix = {{65,66,84,84,84},
+						  {84,67,68,69,84},
+						  {84,84,84,70,84},
+						  {66,65,72,71,70},
+						  {67,68,69,70,71}
+		};
 
-	public void dfs(char[][] board, int i, int j,  List<String> res, boolean[][] visited) {
-
-	    char c = board[i][j];
+		G049_LongestIncreasingInaMat a = new G049_LongestIncreasingInaMat();
+//		a.print(matrix);
+//		System.out.println(a.longestIncreasingPath(matrix));
+		System.out.println(a.longestIncreasingPath_memo(matrix));
+		a.print(matrix);
+	}
 	
-        if (visited[i][j] == true ) return;
-        System.out.println("board["+i+"]["+j+"]"+" c: "+c);
-	    int m = c - 'A';
+    final int[][] dirs= {{0,1},{1,0}, {0,-1},{-1,0}};
+    int m, n;
+    
+    public int longestIncreasingPath_memo(int[][] matrix) {
+        if (matrix.length == 0) return 0;
+        m = matrix.length; n = matrix[0].length;
+        int[][] dp = new int[m][n];
+        int max = 0;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+            	System.out.println("========i: "+i+" j: "+j);
+                int len = dfs(matrix, i, j, dp);
+                System.out.println("========i: "+i+" j: "+j+" len "+len);
+                max = Math.max(max, len);
+            }
+        	System.out.println();
+        }
+        return max;
+    }
 
-        System.out.println("m: "+m);
-        if (p.next[m] == null) p.next[m] = new TrieNode();
-        p = p.next[m];
-		System.out.println("p: "+p);
-        
-        
-//	    if (c == '#' || p.next[c - 'a'] == null) return;
-//	    p = p.next[c - 'a'];
-//	    System.out.println("p.word: "+p.word);
-//	    if (p.word != null) {   // found one
-//	        res.add(p.word);
-//	        p.word = null;     // de-duplicate
-//	    }
-
-        visited[i][j] = true;
-	    if (i > 0) dfs(board, i - 1, j , res, visited); 
-	    if (j > 0) dfs(board, i, j - 1,  res,visited);
-	    if (i < board.length - 1) dfs(board, i + 1, j,  res,visited); 
-	    if (j < board[0].length - 1) dfs(board, i, j + 1,  res, visited); 
-	    board[i][j] = c;
-	    
+    private int dfs(int[][] matrix, int i, int j, int[][] dp) {
+    	System.out.println("dp["+i+"]["+j+"] "+dp[i][j]);
+        if (dp[i][j] != 0) return dp[i][j];
+        for (int[] d : dirs) {
+            int x = i + d[0], y = j + d[1];
+//            System.out.println("x:"+x+" y:"+y+" i:"+i+" j:"+j);
+            if (0 <= x && x < m && 0 <= y && y < n && check(matrix[x][y] , matrix[i][j])) {
+            	System.out.println("matrix["+x+"]["+y+"] "+matrix[x][y]+" matrix["+i+"]["+j+"] "+matrix[i][j]);
+            	dp[i][j] = Math.max(dp[i][j], dfs(matrix, x, y, dp));
+              
+//                System.out.println("==dp===");
+                print(dp);
+            }
+        }
+//    	System.out.println("return cache["+i+"]["+j+"] "+cache[i][j]);
+        return ++dp[i][j];
+    }
+    
+    public boolean check(int after, int before) {
+    	boolean result = false;
+    	int count =0;
+    	System.out.println("====================count: "+count);
+    	if(after>before && count <2) {
+    		result =true;
+    		count--;
+    		System.out.println("=======33333333333=============count: "+count);
+    	}else {
+    		count++;
+    	}
+		return result;
+    	
+    }
+    
+	public int longestIncreasingPath(int[][] matrix) {
+		 if(matrix.length==0) return 0;
+		 
+		 m = matrix.length;
+		 n = matrix[0].length;
+		 int ans =0;
+		 for(int i=0; i< m; ++i) {
+			 for(int j=0; j<n; ++j) {
+				 ans= Math.max(ans, dfs(matrix, i, j));
+			 }
+		 }
+		 return ans;
+	 }
+	int dfs(int[][] matrix, int i, int j) {
+		int ans =0;
+		for(int[] d : dirs) {
+			int x = i+d[0], y = j+d[1];
+			System.out.println("x:"+x+" y:"+y+" i:"+i+" j:"+j);
+			if(0 <= x && x<m && 0<=y && y<n && matrix[x][y] > matrix[i][j]) {
+				System.out.println("matrix["+x+"]["+y+"] "+matrix[x][y]+" matrix["+i+"]["+j+"] "+matrix[i][j]);
+				ans = Math.max(ans, dfs(matrix,x,y));
+				System.out.println("=========================ans: "+ans);
+			}
+		}
+		return ++ans;
 	}
-
-	public TrieNode buildTrie(String[] words) {
-	    TrieNode root = new TrieNode();
-	    for (String w : words) {
-	        TrieNode p = root;
-	        for (char c : w.toCharArray()) {
-	            int i = c - 'a';
-	            System.out.println("i: "+i);
-	            if (p.next[i] == null) p.next[i] = new TrieNode();
-	            p = p.next[i];
-	       }
-	       System.out.println("w: "+w);
-	       p.word = w;
-	    }
-	    return root;
+	
+	
+	
+	
+	
+	
+	
+	void print(int[][] grid) {
+		for(int i=0; i<grid.length; i++) {
+//			System.out.print("grid["+i+"] "+grid[i].length+"\t");
+			for(int j=0; j<grid[i].length; j++) {
+				System.out.print(grid[i][j]+"\t");
+			}
+			System.out.println();
+		}
 	}
-
-
 
 }
