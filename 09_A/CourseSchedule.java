@@ -3,24 +3,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-/**
- * There are a total of n courses you have to take, 
- * labeled from 0 to n - 1. Some courses may have 
- * prerequisites, for example to take course 0 you 
- * have to first take course 1, which is expressed 
- * as a pair: [0,1]
- * Given the total number of courses and a list of 
- * prerequisite pairs, is it possible for you to 
- * finish all courses?
- * 
- * @author Lu
- *
- */
+
 public class CourseSchedule {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int[][] pre = {{1, 0}, {2, 0}, {0, 2}};
+		int[][] pre = {{1, 0}, {2, 1}, {2, 3}};
 		System.out.println(new CourseSchedule().canFinish(3, pre));
 	}
 	
