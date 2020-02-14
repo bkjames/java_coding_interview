@@ -1,118 +1,142 @@
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+package ama;
+import java.util.*;
 
-
-public class CourseSchedule {
+public class CourseSch {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int[][] pre = {{1, 0}, {2, 1}, {2, 3}};
-		System.out.println(new CourseSchedule().canFinish(3, pre));
+		int numCourse= 4;
+//		int[][] nums = {{1,0},{0,1}};
+//		int[][] nums = {{1,0}};
+//		int[][] nums = {{1,0}, {2,1},{1,2}};
+		int[][] nums = {{1,0}, {2,1}, {3,2}};
+		CourseSch a = new CourseSch();
+		System.out.println(a.canFinish_best(numCourse, nums));
+		System.out.println(a.canFinish2(numCourse, nums));
 	}
 	
-	/**
-	 * DFS Topological Sorting solution
-	 * L ← Empty list that will contain the sorted nodes
-	 * while there are unmarked nodes do
-	 * 		select an unmarked node n
-	 * 		visit(n) 
-	 * function visit(node n)
-	 * 		if n has a temporary mark then stop (not a DAG)
-	 * 		if n is not marked (i.e. has not been visited yet) then
-	 * 			mark n temporarily
-	 * 			for each node m with an edge from n to m do
-	 * 				visit(m)
-	 * 			mark n permanently
-	 * 			unmark n temporarily
-	 * 			add n to head of L
-	 */
-	public boolean canFinish(int numCourses, int[][] prerequisites){
-		Set[] isPre = new Set[numCourses];
-		for(int i = 0; i < isPre.length; i++) isPre[i] = new HashSet();
-		boolean[] t_marked = new boolean[numCourses];
-		boolean[] marked = new boolean[numCourses];
-		for(int i = 0; i < prerequisites.length; i++){
-			int course = prerequisites[i][0];
-			int pre = prerequisites[i][1];
-			isPre[pre].add(course);
+	public  boolean canFinish_best(int numCourses, int[][] prerequisites) {
+		if (numCourses <= 0)
+			return false;
+		Queue<Integer> queue = new LinkedList<>();
+		int[] inDegree = new int[numCourses];
+		for (int i = 0; i < prerequisites.length; i++) {
+			inDegree[prerequisites[i][1]]++;
 		}
-		Queue<Integer> queue = new LinkedList<Integer>();
-		for(int i = 0; i < numCourses; i++) queue.add(i);
-		
-		while(!queue.isEmpty()){
-			int course = queue.poll();
-			if(marked[course]) continue;
-			if(!visit(course, isPre, t_marked, marked)) return false;
+		for (int i = 0; i < inDegree.length; i++) {
+			if (inDegree[i] == 0)
+				queue.offer(i);
 		}
-		return true;
-	}
-	private boolean visit(int course, Set[] isPre, boolean[] t_marked, boolean[] marked){
-		if(t_marked[course]) return false;
-		t_marked[course] = true;
-		Set<Integer> set = isPre[course];
-			for(Integer i : set){
-				if(!visit(i, isPre, t_marked, marked)) return false;
+		while (!queue.isEmpty()) {
+			int x = queue.poll();
+			System.out.println("x:   "+x);
+			for (int i = 0; i < prerequisites.length; i++) {
+				if (x == prerequisites[i][0]) {
+					System.out.println("22x: "+x);
+					inDegree[prerequisites[i][1]]--;
+					if (inDegree[prerequisites[i][1]] == 0)
+						queue.offer(prerequisites[i][1]);
+				}
 			}
-		marked[course] = true;
-		t_marked[course] = false;
-
+		}
+		for (int i = 0; i < inDegree.length; i++) {
+			if (inDegree[i] != 0)
+				return false;
+		}
 		return true;
 	}
 	
-
-	/**
-	 * A topological ordering is possible 
-	 * if and only if the graph has no directed cycles
-	 * 
-	 * BFS: Topological Sorting
-	 * Sorting will terminate when there are no more nodes with no incoming
-	 * edges. If G is not a DAG, the number of sorted nodes does not equal 
-	 * to total nodes(A cycle will remain)
-	 */
-    public boolean canFinish2(int numCourses, int[][] prerequisites) {
-    	
-    	//isPre[i][j] is true if course i is prerequisite of course j
-    	boolean[][] isPre = new boolean[numCourses][numCourses];
-    	//record how many incoming each node currently have
-    	int[] incomings = new int[numCourses];
-    	for(int i = 0; i < prerequisites.length; i++){
-    		int course = prerequisites[i][0];
-    		int pre = prerequisites[i][1];
-    		if(!isPre[pre][course]){
-    			incomings[course]++;
-    		}
-    		isPre[pre][course] = true;
-    	}
-    	
-    	//count the sorted nodes
-    	int sort_count = 0;
-    	Queue<Integer> queue = new LinkedList();
-    	//put nodes with no incoming edges in to queue
-    	for(int course = 0; course < numCourses; course++){
-    		if(incomings[course] == 0) queue.add(course);
-    	}
-    	while(!queue.isEmpty()){
-    		//fetch a node course from the queue 
-    		int course = queue.poll();
-    		sort_count++;
-    		
-    		//for each node that course links to, reduce the
-    		//number of their incoming edges.if the node has
-    		//no more incoming edges, put it to the tail of 
-    		//the queue
-    		for(int i = 0; i < numCourses; i++){
-    			if(isPre[course][i]){
-    				incomings[i]--;
-    				if(incomings[i] == 0){
-    					queue.add(i);
-    				}
-    			}
-    		}
-    	}
-    	return sort_count == numCourses;
-    }
-
-
+	public static boolean canFinish_best2(int numCourses, int[][] prerequisites) {
+		if (numCourses <= 0)
+			return false;
+		Queue<Integer> queue = new LinkedList<>();
+		int[] inDegree = new int[numCourses];
+		for (int i = 0; i < prerequisites.length; i++) {
+			inDegree[prerequisites[i][1]]++;
+		}
+		for (int i = 0; i < inDegree.length; i++) {
+			if (inDegree[i] == 0)
+				queue.offer(i);
+		}
+		while (!queue.isEmpty()) {
+			int x = queue.poll();
+			for (int i = 0; i < prerequisites.length; i++) {
+				if (x == prerequisites[i][0]) {
+					inDegree[prerequisites[i][1]]--;
+					if (inDegree[prerequisites[i][1]] == 0)
+						queue.offer(prerequisites[i][1]);
+				}
+			}
+		}
+		for (int i = 0; i < inDegree.length; i++) {
+			if (inDegree[i] != 0)
+				return false;
+		}
+		return true;
+	}
+	
+public boolean canFinish2(int numCourses, int[][] prerequisites){
+	    
+		int[] incomingEdges = new int[numCourses];
+	    List<Integer>[] goCourses = new List[numCourses];
+	    for(int i=0;i<goCourses.length;i++){
+	        goCourses[i] = new LinkedList<Integer>();
+	    }
+	    for(int[] pair: prerequisites){
+	        incomingEdges[pair[0]]++;
+	        goCourses[pair[1]].add(pair[0]);
+	    }
+	    Queue<Integer> queue = new LinkedList<Integer>();
+	    for(int i=0;i<incomingEdges.length;i++){
+	        if(incomingEdges[i]==0){
+	            queue.add(i);
+	        }
+	    }
+	    int edgeCnt = prerequisites.length;
+	    while(!queue.isEmpty()){
+	        int cur = queue.poll();
+	        for(int goCrs: goCourses[cur]){
+	             edgeCnt--;
+	             if(--incomingEdges[goCrs]==0)
+	                queue.add(goCrs);
+	        }
+	    }
+	    return edgeCnt==0;
+	}
+	
+	
+	
+	
+	
+	
+	
+	public boolean canFinish(int numCourses, int[][] prerequisites) {
+	    int[][] matrix = new int[numCourses][numCourses]; // i -> j
+	    int[] indegree = new int[numCourses];
+	    
+	    for (int i=0; i<prerequisites.length; i++) {
+	        int ready = prerequisites[i][0];
+	        int pre = prerequisites[i][1];
+	        System.out.println("ready: "+ready+" pre "+pre);
+	        if (matrix[pre][ready] == 0)
+	            indegree[ready]++; //duplicate case
+	        matrix[pre][ready] = 1;
+	    }
+	    
+	    int count = 0;
+	    Queue<Integer> queue = new LinkedList();
+	    for (int i=0; i<indegree.length; i++) {
+	        if (indegree[i] == 0) queue.offer(i);
+	    }
+	    while (!queue.isEmpty()) {
+	        int course = queue.poll();
+	        count++;
+	        for (int i=0; i<numCourses; i++) {
+	            if (matrix[course][i] != 0) {
+	                if (--indegree[i] == 0)
+	                    queue.offer(i);
+	            }
+	        }
+	    }
+	    return count == numCourses;
+	}
 }
